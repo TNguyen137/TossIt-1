@@ -1,7 +1,21 @@
+import * as firebase from 'firebase';
+import NewListing from 'NewListing'
 import React, { Component } from 'react'
 import {
-   View, Text, Button, TextInput
+   View, Text, Button, TextInput, Alert
 } from 'react-native'
+
+/**
+* Initialize firebase
+*/
+const firebaseConfig = {
+    apiKey: "AIzaSyAtyvVb1sMkEa8I7USUk7Ee3Do1lnaMQ9A",
+    authDomain: "goingmerry-53c7c.firebaseapp.com",
+    databaseURL: "https://goingmerry-53c7c.firebaseio.com",
+    storageBucket: "goingmerry-53c7c.appspot.com",
+};
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+const database = firebaseApp.database().ref();
 
 export default class NewListingContinued extends Component {
     constructor(props) {
@@ -69,7 +83,14 @@ export default class NewListingContinued extends Component {
         )
     }
 
-    _isPress = () => { 
+    _isPress = () => {
+        database.child("users").child("Taylor").child("post_list").child(NewListing.this.state.title).set({
+            location: this.state.location,
+            pickupDate: this.state.pickupDate,
+            time: this.state.time,
+            payment: this.state.payment
+        });
+        Alert.alert("Post added!");
         this.props.navigator.popN(2)
     }
 }
