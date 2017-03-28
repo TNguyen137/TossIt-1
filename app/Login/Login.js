@@ -78,6 +78,8 @@ export default class LoginScreen extends Component {
         })
     }
     _isPressRegister = () => {
+        // var address = '2430 Piedmont Rd NE, Atlanta, GA 30324, USA';
+        // this.refs.db.getLocation(address, '');
         this.props.navigator.push({
             title: 'Register',
             name: 'Register',

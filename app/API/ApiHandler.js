@@ -24,6 +24,7 @@ const firebaseConfig = {
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 db = firebaseApp.database();
 const URL = 'https://goingmerry-53c7c.firebaseio.com';
+const GOOGLE_API_KEY = 'AIzaSyBCg9vQp_SoSmKHFmCYdYzNuOLusaSGSng';
 
 export default class ApiHandler extends Component {
     constructor() {
@@ -100,5 +101,35 @@ export default class ApiHandler extends Component {
     postItem = (username, item, data) => {
         var _url = 'users/' + username + '/post_list/' + item;
         db.ref(_url).set(data);
+    }
+
+    /**
+     * A function to get long lat from a passed in Address
+     */
+    getLocation = (address, callback) => {
+        var convertedAddress = this.convertSpace(address);
+        var _url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + convertedAddress + '&key=' + GOOGLE_API_KEY;
+        console.log(_url);
+        fetch(_url)
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                var location = data.results[0].geometry.location;
+                console.log(location);
+                callback(location);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
+    convertSpace = (str) => {
+        var newStr = '';
+        for (var i = 0; i < str.length; i++) {
+            if (str.charAt(i) == ' ') newStr += '+';
+            else newStr += str.charAt(i);
+        }
+        return newStr;
     }
 }
